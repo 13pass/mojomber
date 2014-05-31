@@ -1,0 +1,8 @@
+% layout 'default';
+% title 'Mojomber';
+<h1>Welcome to Mojomber!</h1>
+<div class="message">
+  <div class="alert alert-info">Use arrows keys to move et space bar to place a bomb</div>
+</div>
+<div id="content">
+<div>

@@ -359,21 +359,21 @@
 
                         var code = e.keyCode ? e.keyCode : e.which;
                         if (code == 37 || code == 65) {
-                            ws.send($.toJSON({"type" : "move", "direction" : "left"}));
+                            ws.send(JSON.stringify({"type" : "move", "direction" : "left"}));
                         }
                         else if (code == 38 || code == 87) {
-                            ws.send($.toJSON({"type" : "move", "direction" : "up"}));
+                            ws.send(JSON.stringify({"type" : "move", "direction" : "up"}));
                         }
                         else if (code == 39 || code == 68) {
-                            ws.send($.toJSON({"type" : "move", "direction" : "right"}));
+                            ws.send(JSON.stringify({"type" : "move", "direction" : "right"}));
                         }
                         else if (code == 40 || code == 83) {
-                            ws.send($.toJSON({"type" : "move", "direction" : "down"}));
+                            ws.send(JSON.stringify({"type" : "move", "direction" : "down"}));
                         }
                         else if (code == 32) {
                             var player = mojomber.getPlayer();
                             if (!player.bomb) {
-                                ws.send($.toJSON({"type" : "bomb"}));
+                                ws.send(JSON.stringify({"type" : "bomb"}));
                                 player.mine();
                                 mojomber.redraw();
                             }
@@ -387,7 +387,8 @@
                 };
 
                 ws.onmessage = function(e) {
-                    var data = $.evalJSON(e.data);
+                    //var data = $.evalJSON(e.data);
+                    var data = $.parseJSON(e.data);
                     var type = data.type;
 
                     //console.log('Message received');

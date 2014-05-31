@@ -1,0 +1,45 @@
+#!/usr/bin/env perl
+use Mojolicious::Lite;
+use Mojolicious::Plugin::Bootstrap3;
+use Bomberman;
+
+plugin "bootstrap3";
+
+app->asset('mojomber.js' => 'mojomber.js');
+my $game = Bomberman->new;  
+
+websocket '/ws' => sub {
+  my $self = shift;
+  # Increase inactivity timeout for connection to 300 seconds
+  Mojo::IOLoop->stream($self->tx->connection)->timeout(300);
+ 
+  my $cid = $game->connect_player($self);
+  $self->on(json => sub {
+    my ($self, $hash) = @_;
+    my $type = $hash->{type};
+    return unless $type;
+
+    if ($type eq 'move') {
+      $game->handle_move($self, $hash);
+    }
+    elsif ($type eq 'bomb') {
+      $game->handle_bomb($self, $hash);
+    }    
+  });
+
+  $self->on( finish => sub {
+    $game->disconnect_player($self);
+  });
+
+};
+
+get '/' => sub {
+  my $self = shift;
+  $self->render('index');
+};
+
+
+
+app->start;
+
+
