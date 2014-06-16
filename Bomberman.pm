@@ -319,17 +319,10 @@ sub _get_bombs {
   return [map { {id => $_, pos => $BOMBS->{$_}->{pos}} } keys %$BOMBS];
 }
 
-sub _message_to_json {
-  my %message = @_;
-
-  my $json = Mojo::JSON->new;
-  return $json->encode({%message});
-}
-
 sub _send_message {
   my $self = shift;
 
-  $self->send(_message_to_json(@_));
+  $self->send({json => {@_}});
 }
 
 sub _send_message_to_other {
@@ -338,8 +331,6 @@ sub _send_message_to_other {
 
   my $id = _get_id($self);
 
-  my $message = _message_to_json(%message);
-
   foreach my $cid (keys %$PLAYERS) {
     next if $cid eq $id;
 
@@ -347,7 +338,7 @@ sub _send_message_to_other {
 
     # If player is connected
     if ($player && $player->{tx}) {
-      $PLAYERS->{$cid}->{tx}->send($message);
+      $PLAYERS->{$cid}->{tx}->send({json => { %message} });
     }
 
     # Cleanup disconnected player
