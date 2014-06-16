@@ -6,7 +6,7 @@ before running this code you need to install 2 cpan modules:
     Mojolicious
     Mojolicious::Plugin::Bootstrap3
 
-You can use [https://github.com/miyagawa/cpanminus | cpanminus] to do so
+You can use [cpanminus](https://github.com/miyagawa/cpanminus) to do so
 
 
 Running
